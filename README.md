@@ -34,8 +34,8 @@ sylph-tax --help
 # download all taxonomy files
 sylph-tax download --download-to /path/to/taxonomy_file_folder
 
-# incorporate GTDB-R220 and IMGVR-4.1 taxonomies into sylph's results
-sylph-tax taxonomy sylph_results/*.tsv -t GTDB_R220 IMGVR_4.1 -o output_prefix-
+# incorporate GTDB-r220 and IMGVR-4.1 taxonomies into sylph's results
+sylph-tax taxonomy sylph_results/*.tsv -t GTDB_r220 IMGVR_4.1 -o output_prefix-
 
 ls output_prefix-sample1.sylphmpa
 ls output_prefix-sample2.sylphmpa
