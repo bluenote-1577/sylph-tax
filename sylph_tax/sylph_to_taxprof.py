@@ -4,8 +4,8 @@ from collections import defaultdict
 import sys 
 import csv 
 import gzip 
-import argparse
-from metadata_files import __name_to_metadata_file__
+
+from sylph_tax.metadata_files import __name_to_metadata_file__
 
 def genome_file_to_gcf_acc(file_name):
     if 'ASM' in file_name:

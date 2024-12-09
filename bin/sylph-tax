@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+import argparse
+import sys
+import os
+
+# Add the parent directory to the path if running directly
+if __name__ == '__main__':
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    sys.path.insert(0, repo_root)
+
+import sylph_tax.download_taxonomy as download_taxonomy
+import sylph_tax.sylph_to_taxprof as sylph_to_taxprof
+import sylph_tax.json_config as json_config
+import sylph_tax.merge_sylph_taxprof as merge_sylph_taxprof
+from sylph_tax.version import __version__
+from sylph_tax.metadata_files import __name_to_metadata_file__
+
+def taxonomy_command(args, config):
+    sylph_to_taxprof.main(args, config)
+
+def merge_command(args, config):
+    merge_sylph_taxprof.main(args, config)
+
+def download_command(args, config):
+    download_taxonomy.main(args, config)
+
+def populate_download_options(parser):
+    """Handle the download subcommand"""
+    parser.add_argument("--download-to", help="Set taxonomy metadata directory", type=str)
+
+def populate_taxonomy_options(parser):
+    """Populate the profile subcommand parser with options"""
+    parser.add_argument("-s",
+                        "--sylph-results",
+                        help="sylph's results file (TSV)",
+                        type=str,
+                        metavar="FILE",
+                        required=True)
+    parser.add_argument("-o",
+                        "--output-prefix",
+                        help="Append this prefix to the outputs. Output files will be 'prefix + Sample_file_column + .sylphmpa'",
+                        metavar="STRING",
+                        type=str,
+                        default = "")
+    taxonomy_metadata_help = "Taxonomy metadata inputs. If multiple are provided, they will be merged. Provided taxonomies: [" + ", ".join(__name_to_metadata_file__.keys()) + "]. Custom metadata files can be used as well; see online manual."
+    parser.add_argument("-t",
+                        "--taxonomy-metadata",
+                        help = taxonomy_metadata_help,
+                        type = str,
+                        metavar="FILE",
+                        required=True,
+                        nargs='+')
+    parser.add_argument("-a",
+                        "--annotate-virus-hosts",
+                        help = "Add additional column(s) by integrating viral-host information available (currently available for IMGVR4.1)",
+                        action='store_true')
+    parser.add_argument("-f",
+                        "--add-folder-information",
+                        help = "Include directory/folder path information in the output files. This is needed if your samples have the same read name but different directory structures.",
+                        action='store_true')
+
+def populate_merge_options(parser):
+    parser.add_argument('files', nargs='+', help='Paths to the *.sylphmpa files output by sylph-tax taxonomy')
+    parser.add_argument('-o', '--output', help='Name of the tsv table to output', default='merged_data.tsv')
+    parser.add_argument('--column', choices=['relative_abundance', 'sequence_abundance', 'ANI'], required=True, help='The data type to output')
+
+
+def main():
+    # Create the top-level parser
+    parser = argparse.ArgumentParser(
+        description='sylph-tax - A taxonomy management tool for the sylph metagenome profiler',
+        prog='sylph-tax',
+    )
+
+    try:
+        config = json_config.JsonConfig()
+    except:
+        print("Could not load config file at ~/.config/sylph-tax/config.json. Perhaps it is missing or corrupted. Remove the file, change permissions, and try again.")
+        config = None
+
+    subparsers = parser.add_subparsers(dest='command', required=True)
+
+    taxonomy_parser = subparsers.add_parser(
+        'taxonomy',
+        help='Profile taxonomy data'
+    )
+    
+    merge_parser = subparsers.add_parser(
+        'merge',
+        help='Merge taxonomy data'
+    )
+
+    download_parser = subparsers.add_parser(
+        'download',
+        help='Download sylph taxonomy data for a collection of genomic databases.'
+    )
+
+    populate_taxonomy_options(taxonomy_parser)
+    populate_download_options(download_parser)
+    populate_merge_options(merge_parser)
+    merge_parser.set_defaults(func=merge_command)
+    taxonomy_parser.set_defaults(func=taxonomy_command)
+    download_parser.set_defaults(func=download_command)
+
+    # Parse arguments and call the appropriate function
+    args = parser.parse_args()
+    args.func(args, config)
+    
+if __name__ == '__main__':
+    main()

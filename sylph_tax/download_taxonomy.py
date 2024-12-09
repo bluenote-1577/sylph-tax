@@ -4,8 +4,8 @@ import sys
 import urllib.request
 from pathlib import Path
 from typing import List
-from version import __version__
-from metadata_files import __metadata_file_urls__
+from sylph_tax.version import __version__
+from sylph_tax.metadata_files import __metadata_file_urls__
 
 class SylphTaxDownloader:
     def __init__(self, db_location):

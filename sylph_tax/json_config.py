@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from version import __version__
+from sylph_tax.version import __version__
 
 class JsonConfig:
 

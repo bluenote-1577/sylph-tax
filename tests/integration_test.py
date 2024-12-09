@@ -10,10 +10,10 @@ from unittest.mock import patch, MagicMock
 import subprocess
 import sys
 
-from download_taxonomy import SylphTaxDownloader
-from json_config import JsonConfig
-from metadata_files import __metadata_file_urls__, __name_to_metadata_file__
-from merge_sylph_taxprof import merge_data
+from sylph_tax.download_taxonomy import SylphTaxDownloader
+from sylph_tax.json_config import JsonConfig
+from sylph_tax.metadata_files import __metadata_file_urls__, __name_to_metadata_file__
+from sylph_tax.merge_sylph_taxprof import merge_data
 
 class TestSylphTaxIntegration(unittest.TestCase):
     @classmethod
@@ -52,7 +52,7 @@ class TestSylphTaxIntegration(unittest.TestCase):
             self.fail(f"Invalid TSV file {file_path}: {str(e)}")
             return False
 
-    @patch('download_taxonomy.urllib.request.urlretrieve')
+    @patch('sylph_tax.download_taxonomy.urllib.request.urlretrieve')
     def test_full_workflow(self, mock_urlretrieve):
         """Test the full workflow from download to merge."""
         # Mock the download to create fake taxonomy files
@@ -69,7 +69,7 @@ class TestSylphTaxIntegration(unittest.TestCase):
         try:
             # Run sylph-tax taxonomy command
             cmd = [
-                sys.executable,"sylph-tax", "download",
+                sys.executable, "bin/sylph-tax", "download",
                 "--download-to", str(self.taxonomy_dir),
             ]
             result = subprocess.run(cmd, capture_output=True, text=True)
@@ -81,7 +81,7 @@ class TestSylphTaxIntegration(unittest.TestCase):
             
             # Run sylph-tax taxonomy command
             cmd = [
-                sys.executable, "sylph-tax", "taxonomy",
+                sys.executable, "bin/sylph-tax", "taxonomy",
                 "-s", str(sylph_result_path),
                 "-t", "IMGVR_4.1", "GTDB_r220",
                 "-o", output_prefix
