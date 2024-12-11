@@ -3,10 +3,11 @@
 > [!NOTE]
 > This repo replaces the [sylph-utils](https://github.com/bluenote-1577/sylph-utils) repository with a cleaner commandline interface and easy taxonomy downloading.
 
-The [sylph](https://github.com/bluenote-1577/sylph) metagenome profiler outputs a TSV format that does not have taxonomic information. `sylph-tax` is a program for turning `sylph`'s output into a **taxonomic profile** like Kraken or MetaPhlAn.
-## Taxonomy integration - available databases 
+The [sylph](https://github.com/bluenote-1577/sylph) metagenome profiler outputs a TSV format that does not have taxonomic information. `sylph-tax` is a program for turning `sylph`'s output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
 
-The following databases are currently supported (with pre-built sylph databases [available here](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases))
+## Taxonomy integration - available databases with taxonomy files
+
+The following databases have supported taxonomic annotations. The pre-built sylph databases are [available here](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases).
 
 | sylph-tax identifier   | Database description                                                                                             | Clades     |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------- |
@@ -17,9 +18,10 @@ The following databases are currently supported (with pre-built sylph databases 
 | FungiRefSeq-2024-07-25 | Refseq fungi representative genomes collected on 2024-07-25                                                      | Eukaryote  |
 | TaraEukaryoticSMAG     | [TARA eukaryotic SMAGs from Delmont et al.](https://www.sciencedirect.com/science/article/pii/S2666979X22000477) | Eukaryote  |
 | IMGVR_4.1              | [IMG/VR 4.1 high-confidence viral OTU genomes](https://genome.jgi.doe.gov/portal/IMG_VR/IMG_VR.home.html)        | Virus      |
+
 ## Install
 
-#### Conda (NOT READY YET)
+#### Conda
 
 > [!TIP] 
 > If you installed the latest version of `sylph` via conda, `sylph-tax` is also installed. (NOT READY YET)
@@ -62,8 +64,8 @@ sylph-tax download --download-to /my/folder/sylph_taxonomy_files/
 ```
 
 * Downloads taxonomic annotation files (~50 MB; [see here](https://zenodo.org/records/14320496)) to `--download-to`.
-* This folder can be wherever you want. Its location is written to `~/.config/sylph-tax/config.json`.
-* If you don't have access to `$HOME`, then you must specify input the downloaded files for `sylph-tax taxprof`. 
+* This folder can be wherever you want. Its location is written to `~/.config/sylph-tax/config.json`. 
+* If you don't have access to `$HOME`, you can specify a custom location in the `SYLPH_TAXONOMY_CONFIG` environment variable. E.g. `export SYLPH_TAXONOMY_CONFIG=/write_access_folder/sylph-tax-config.json`.
 ### `taxprof` - taxonomic profiles from sylph's output
 
 ```sh
