@@ -4,28 +4,28 @@ from sylph_tax.version import __version__
 
 class JsonConfig:
 
-    def __init__(self):
-        self.json = self._load_config()
+    def __init__(self, config_location):
+        self.config_location = config_location
+        self.json = self._load_config(config_location)
 
         cfg_ver = self.json.get('version', None)
         cfg_ver_major = cfg_ver.split('.')[0]
         version_major = __version__.split('.')[0]
 
         if cfg_ver_major != version_major:
-            printerr(f"Config file version at {self._get_config_path()} is different than sylph-tax version: {cfg_ver} != {__version__} -- sylph-tax has had major updates since the initial run. Check the CHANGELOG to make ensure database compatibility. Update the config file version to {__version__} to suppress this message.")
+            print(f"WARNING: Config file version at {self.config_location} is different than sylph-tax version: {cfg_ver} != {__version__} -- sylph-tax has had major updates since the initial run. Check the CHANGELOG to make ensure database compatibility. Update the config file version to {__version__} to suppress this message.")
 
-    def _get_config_path(self) -> Path:
+    def _make_config_dir(self, config_location):
         """Get the config file path."""
-        config_dir = Path.home() / '.config' / 'sylph-tax'
-        config_dir.mkdir(parents=True, exist_ok=True)
-        return config_dir / 'config.json'
+        config_dir = Path(config_location)
+        config_dir.parent.mkdir(parents=True, exist_ok=True)
 
-    def _load_config(self) -> dict:
+    def _load_config(self, config_location) -> dict:
         """Load or create config file."""
-        config_path = self._get_config_path()
+        self._make_config_dir(config_location)
 
-        if config_path.exists():
-            with open(config_path) as f:
+        if config_location.exists():
+            with open(config_location) as f:
                 return json.load(f)
 
         # Default config
@@ -35,18 +35,17 @@ class JsonConfig:
         }
 
         # Save default config
-        with open(config_path, 'w') as f:
+        with open(config_location, 'w') as f:
             json.dump(default_config, f, indent=2)
 
         return default_config
 
     def set_taxonomy_dir(self, path: str) -> None:
         """Set and save custom database directory."""
-        path = Path(path).expanduser().resolve()
-        path.mkdir(parents=True, exist_ok=True)
-        self.json['taxonomy_dir'] = str(path)
+        abs_path = Path(path).absolute()
+        self.json['taxonomy_dir'] = str(abs_path)
 
-        with open(self._get_config_path(), 'w') as f:
+        with open(self.config_location, 'w') as f:
             json.dump(self.json, f, indent=2)
 
 

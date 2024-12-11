@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import argparse
 import sys
+from pathlib import Path
 import os
+from sylph_tax.metadata_files import __tax_env_variable__
 
 # Add the parent directory to the path if running directly
 if __name__ == '__main__':
@@ -30,12 +32,11 @@ def populate_download_options(parser):
 
 def populate_taxonomy_options(parser):
     """Populate the profile subcommand parser with options"""
-    parser.add_argument("-s",
-                        "--sylph-results",
-                        help="sylph's results file (TSV)",
+    parser.add_argument("sylph_results",
+                        help="sylph result files (TSV)",
                         type=str,
-                        metavar="FILE",
-                        required=True)
+                        metavar="SYLPH-FILE",
+                        nargs='+')
     parser.add_argument("-o",
                         "--output-prefix",
                         help="Append this prefix to the outputs. Output files will be 'prefix + Sample_file_column + .sylphmpa'",
@@ -72,27 +73,35 @@ def main():
         prog='sylph-tax',
     )
 
+    env_config_loc = os.environ.get('SYLPH_TAXONOMY_CONFIG')
+    if not env_config_loc:
+        default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
+        print(f"MAIN: Setting default config location at '{default_config_loc}' -- this can be set in the environment variable {__tax_env_variable__}.")
+        os.environ[__tax_env_variable__] = str(default_config_loc)
+
+    config_loc = Path(env_config_loc)
+
     try:
-        config = json_config.JsonConfig()
+        config = json_config.JsonConfig(config_loc)
     except:
-        print("Could not load config file at ~/.config/sylph-tax/config.json. Perhaps it is missing or corrupted. Remove the file, change permissions, and try again.")
+        print(f"WARNING: Could not load config file at '{config_loc}' -- please set the {__tax_env_variable__} environmental variable to a valid file name such as /path/to/config.json.")
         config = None
 
     subparsers = parser.add_subparsers(dest='command', required=True)
 
     taxonomy_parser = subparsers.add_parser(
-        'taxonomy',
-        help='Profile taxonomy data'
+        'taxprof',
+        help='Generate a taxonomic profile by integrating taxonomic information into sylph output files'
     )
     
     merge_parser = subparsers.add_parser(
         'merge',
-        help='Merge taxonomy data'
+        help='Merge taxonomic profiles from sylph-tax taxprof'
     )
 
     download_parser = subparsers.add_parser(
         'download',
-        help='Download sylph taxonomy data for a collection of genomic databases.'
+        help='Download sylph-compatible taxonomy data for a collection of genomic databases.'
     )
 
     populate_taxonomy_options(taxonomy_parser)

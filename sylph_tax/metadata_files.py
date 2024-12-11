@@ -15,3 +15,5 @@ __name_to_metadata_file__ = {"FungiRefSeq-2024-07-25": "fungi_refseq_2024-07-25_
 "SoilSMAG": "soil_smag_metadata.tsv.gz",
 "TaraEukaryoticSMAG": "tara_SMAGs_metadata.tsv.gz",}
 
+__tax_env_variable__ = "SYLPH_TAXONOMY_CONFIG"
+

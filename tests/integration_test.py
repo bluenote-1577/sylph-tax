@@ -37,9 +37,15 @@ class TestSylphTaxIntegration(unittest.TestCase):
         shutil.rmtree(cls.base_dir)
 
     def setUp(self):
+        env_config_loc = os.environ.get('SYLPH_TAXONOMY_CONFIG')
+        if not env_config_loc:
+            default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
+            print(f"MAIN: Setting default config location at '{default_config_loc}' -- this can be set in the environment variable {__tax_env_variable__}.")
+            os.environ[__tax_env_variable__] = str(default_config_loc)
+        config_loc = Path(env_config_loc)
         """Set up each test."""
         # Create new config for each test
-        self.config = JsonConfig()
+        self.config = JsonConfig(config_loc)
         self.config.set_taxonomy_dir(str(self.taxonomy_dir))
 
     def verify_tsv_file(self, file_path):
@@ -81,8 +87,8 @@ class TestSylphTaxIntegration(unittest.TestCase):
             
             # Run sylph-tax taxonomy command
             cmd = [
-                sys.executable, "bin/sylph-tax", "taxonomy",
-                "-s", str(sylph_result_path),
+                sys.executable, "bin/sylph-tax", "taxprof",
+                str(sylph_result_path),
                 "-t", "IMGVR_4.1", "GTDB_r220",
                 "-o", output_prefix
             ]

@@ -50,17 +50,20 @@ class SylphTaxDownloader:
 def main(args, config):
 
     if config == None:
-        print("Could not load config file at ~/.config/sylph-tax/config.json. sylph-tax will not attempt to download taxonomy metadata files. Please manually download taxonomy metadata files yourself.")
+        env_var = os.getenv('SYLPH_TAXONOMY_CONFIG')
+        print(f"ERROR: Could not load config file at {env_var} -- 'sylph-tax download' will not attempt to download taxonomy metadata files. Please manually download taxonomy metadata files yourself. Exiting")
         exit(1)
 
     if config.json['taxonomy_dir'] == "NONE":
-        print("Taxonomy metadata file directory not found.")
+        print("DOWNLOAD: Taxonomy metadata file directory has not been set.")
     else:
-        print(f"Current taxonomy location is set to {config.json['taxonomy_dir']}.")
+        print(f"DOWNLOAD: Current taxonomy location is set to {config.json['taxonomy_dir']}.")
 
     if args.download_to != None:
         config.set_taxonomy_dir(args.download_to)
         downloader = SylphTaxDownloader(args.download_to)
         downloader.download_taxonomy(__metadata_file_urls__)
+        print(f"DOWNLOAD: Taxonomy metadata files have been downloaded to {args.download_to}.")
+        print(f"DOWNLOAD: {config.config_location} has been updated with the new taxonomy directory.")
     else:
-        print("No download directory specified. Please specify a directory using the --download-to option.")
+        print("DOWNLOAD: No download directory specified. Please specify a directory using the --download-to option.")
