@@ -1,9 +1,9 @@
 # sylph-tax - incorporating taxonomy into [sylph](https://github.com/bluenote-1577/sylph)
 
 > [!NOTE]
-> This repo replaces the [sylph-utils](https://github.com/bluenote-1577/sylph-utils) repository with a cleaner commandline interface and easy taxonomy downloading.
+> This repo replaces the [sylph-utils](https://github.com/bluenote-1577/sylph-utils) repository with a cleaner commandline interface and file downloading capabilities.
 
-The [sylph](https://github.com/bluenote-1577/sylph) metagenome profiler outputs a TSV format that does not have taxonomic information. `sylph-tax` is a program for turning `sylph`'s output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
+The [sylph](https://github.com/bluenote-1577/sylph) metagenome profiler outputs a TSV format that does not have taxonomic information. `sylph-tax` can turn `sylph`'s TSV output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
 
 ## Taxonomy integration - available databases with taxonomy files
 
@@ -39,6 +39,11 @@ pip install .
 sylph-tax --help
 ```
 ## Quick start
+
+> [!IMPORTANT]
+> Please [see this manual](https://github.com/bluenote-1577/sylph/wiki/Incorporating-taxonomic-information-into-sylph-with-sylph%E2%80%90tax) for more information on
+> 1. output format information 
+> 2. how to create taxonomy metadata for customized genome databases
 
 ```sh
 # download all taxonomy files (~50 MB)
@@ -76,11 +81,6 @@ sylph-tax taxprof sylph_results/*.tsv  -o prefix_or_folder/ -t {sylph-tax identi
 * `-o`: prepends this prefix to all of the output files. One file is output per sample in `sylph_output.tsv`
 * `-a/--annotate-virus-hosts`: annotates found viral genomes with host information metadata (only available for `IMGVR_4.1` right now) 
 * Output suffix is `.sylphmpa`.  
-
-> [!NOTE]
-> Please [see this manual](https://github.com/bluenote-1577/sylph/wiki/Integrating-taxonomic-information-with-sylph#custom-taxonomies-and-how-it-works) for more information on
-> 1. output format information 
-> 2. how to create taxonomy metadata for customized genome databases
 
 > [!TIP]
 > In python/pandas, `pd.read_csv('output.sylphmpa',sep='\t', comment='#')` works.
