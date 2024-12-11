@@ -12,7 +12,7 @@ import sys
 
 from sylph_tax.download_taxonomy import SylphTaxDownloader
 from sylph_tax.json_config import JsonConfig
-from sylph_tax.metadata_files import __metadata_file_urls__, __name_to_metadata_file__
+from sylph_tax.metadata_files import __metadata_file_urls__, __name_to_metadata_file__, __tax_env_variable__
 from sylph_tax.merge_sylph_taxprof import merge_data
 
 class TestSylphTaxIntegration(unittest.TestCase):
@@ -42,7 +42,8 @@ class TestSylphTaxIntegration(unittest.TestCase):
             default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
             print(f"MAIN: Setting default config location at '{default_config_loc}' -- this can be set in the environment variable {__tax_env_variable__}.")
             os.environ[__tax_env_variable__] = str(default_config_loc)
-        config_loc = Path(env_config_loc)
+
+        config_loc = Path(os.environ[__tax_env_variable__])
         """Set up each test."""
         # Create new config for each test
         self.config = JsonConfig(config_loc)

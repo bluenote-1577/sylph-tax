@@ -73,13 +73,14 @@ def main():
         prog='sylph-tax',
     )
 
-    env_config_loc = os.environ.get('SYLPH_TAXONOMY_CONFIG')
+    env_config_loc = os.environ.get(__tax_env_variable__)
     if not env_config_loc:
         default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
-        print(f"MAIN: Setting default config location at '{default_config_loc}' -- this can be set in the environment variable {__tax_env_variable__}.")
+
+        # confusingly, this may not actually modify the environment variable; only in python-space
         os.environ[__tax_env_variable__] = str(default_config_loc)
 
-    config_loc = Path(env_config_loc)
+    config_loc = Path(os.environ[__tax_env_variable__])
 
     try:
         config = json_config.JsonConfig(config_loc)
