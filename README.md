@@ -7,7 +7,7 @@
 
 ## Taxonomy integration - available databases with taxonomy files
 
-The following [pre-built sylph databases](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases) have available taxonomic annotations. Custom taxonomies can also be incorporated; see below. 
+The following [pre-built sylph databases](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases) have available taxonomic annotations. Custom taxonomies can also be incorporated.
 
 
 | sylph-tax identifier   | Database description                                                                                             | Clades     |
