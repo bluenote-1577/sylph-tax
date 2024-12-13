@@ -7,7 +7,8 @@
 
 ## Taxonomy integration - available databases with taxonomy files
 
-The following databases have supported taxonomic annotations. The pre-built sylph databases are [available here](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases).
+The following [pre-built sylph databases](https://github.com/bluenote-1577/sylph/wiki/Pre%E2%80%90built-databases) have available taxonomic annotations. Custom taxonomies can also be incorporated; see below. 
+
 
 | sylph-tax identifier   | Database description                                                                                             | Clades     |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------- |
@@ -19,22 +20,19 @@ The following databases have supported taxonomic annotations. The pre-built sylp
 | TaraEukaryoticSMAG     | [TARA eukaryotic SMAGs from Delmont et al.](https://www.sciencedirect.com/science/article/pii/S2666979X22000477) | Eukaryote  |
 | IMGVR_4.1              | [IMG/VR 4.1 high-confidence viral OTU genomes](https://genome.jgi.doe.gov/portal/IMG_VR/IMG_VR.home.html)        | Virus      |
 
-## Install
-
-#### Conda
+### Install option 1 - Conda
 ```sh
 conda install -c bioconda sylph-tax
 ```
-#### Python package manager
 
-```sh
-git clone https://github.com/bluenote-1577/sylph-tax/
+### Install option 2 - Python
+```
+git clone https://github.com/bluenote-1577/sylph-tax
 cd sylph-tax
 pip install .
-
-sylph-tax --help
 ```
-## Quick start
+
+### Quick start
 
 > [!IMPORTANT]
 > Please [see this manual](https://github.com/bluenote-1577/sylph/wiki/Incorporating-taxonomic-information-into-sylph-with-sylph%E2%80%90tax) for more information on
