@@ -41,7 +41,7 @@ pip install .
 
 ```sh
 # download all taxonomy files (~50 MB)
-sylph-tax download --download-to /any/location
+sylph-tax download --download-to /any/folder
 
 # incorporate GTDB-r220 and IMGVR-4.1 taxonomies into sylph's results
 sylph-tax taxprof sylph_results/*.tsv -t GTDB_r220 IMGVR_4.1 -o output_prefix-
