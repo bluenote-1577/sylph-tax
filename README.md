@@ -1,9 +1,9 @@
 # sylph-tax - incorporating taxonomy into [sylph](https://github.com/bluenote-1577/sylph)
 
 > [!NOTE]
-> This repo replaces the [sylph-utils](https://github.com/bluenote-1577/sylph-utils) repository with a cleaner commandline interface and file downloading capabilities.
+> This repo replaces the old [sylph-utils](https://github.com/bluenote-1577/sylph-utils) scripts. `sylph-tax` is easier to download/install and use than `sylph-utils`.  
 
-The [sylph](https://github.com/bluenote-1577/sylph) metagenome profiler outputs a TSV format that does not have taxonomic information. `sylph-tax` can turn `sylph`'s TSV output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
+[Sylph](https://github.com/bluenote-1577/sylph) is an efficient and accurate metagenome profiler. However, its output does not have taxonomic information. `sylph-tax` can turn `sylph`'s TSV output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
 
 ## Taxonomy integration - available databases with taxonomy files
 
@@ -22,10 +22,6 @@ The following databases have supported taxonomic annotations. The pre-built sylp
 ## Install
 
 #### Conda
-
-> [!TIP] 
-> If you installed the latest version of `sylph` via conda, `sylph-tax` is also installed. (NOT READY YET)
-
 ```sh
 conda install -c bioconda sylph-tax
 ```
