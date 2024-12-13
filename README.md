@@ -63,7 +63,7 @@ sylph-tax download --download-to /my/folder/sylph_taxonomy_files/
 ```
 
 * Downloads taxonomic annotation files (~50 MB; [see here](https://zenodo.org/records/14320496)) to `--download-to`.
-* This folder can be wherever you want. Its location is written to `~/.config/sylph-tax/config.json`. 
+* This folder (must exist) can be wherever you want. Its location is written to `~/.config/sylph-tax/config.json`. 
 * If you don't have access to `$HOME`, you can specify a custom location in the `SYLPH_TAXONOMY_CONFIG` environment variable. E.g. `export SYLPH_TAXONOMY_CONFIG=/write_access_folder/sylph-tax-config.json`.
 ### `taxprof` - taxonomic profiles from sylph's output
 
