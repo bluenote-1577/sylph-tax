@@ -51,7 +51,7 @@ ls output_prefix-sample2.sylphmpa
 ...
 
 # merge multiple results
-sylph-tax merge *.sylphmpa --columns relative_abundance -o merged_abundance_file.tsv
+sylph-tax merge *.sylphmpa --column relative_abundance -o merged_abundance_file.tsv
 ```
 
 ## `sylph-tax` subcommands
