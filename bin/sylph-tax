@@ -73,6 +73,12 @@ def main():
         prog='sylph-tax',
     )
 
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=__version__,
+    )
+
     env_config_loc = os.environ.get(__tax_env_variable__)
     if not env_config_loc:
         default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
