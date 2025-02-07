@@ -61,6 +61,7 @@ def main(args, config):
         # Read sylph's output TSV file into a Pandas DataFrame
         try:
             df = pd.read_csv(sylph_result, sep='\t')
+            df['Sample_file'] = df['Sample_file'].astype(str)
         except:
             print("ERROR: Could not read sylph results file. Exiting.")
             sys.exit(1)
