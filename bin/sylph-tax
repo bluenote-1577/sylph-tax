@@ -63,7 +63,7 @@ def populate_taxonomy_options(parser):
 def populate_merge_options(parser):
     parser.add_argument('files', nargs='+', help='Paths to the *.sylphmpa files output by sylph-tax taxonomy')
     parser.add_argument('-o', '--output', help='Name of the tsv table to output', default='merged_data.tsv')
-    parser.add_argument('--column', choices=['relative_abundance', 'sequence_abundance', 'ANI'], required=True, help='The data type to output')
+    parser.add_argument('--column', choices=['relative_abundance', 'sequence_abundance', 'ANI', 'Coverage'], required=True, help='The data type to output')
 
 
 def main():

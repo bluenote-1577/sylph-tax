@@ -140,9 +140,9 @@ def main(args, config):
             # Print the CAMI BioBoxes profiling format
             of.write(f"#SampleID\t{sample_file}\tTaxonomies_used:{args.taxonomy_metadata}\n")
             if annotate_virus:
-                of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\t Coverage (if strain-level)\tVirus_host (if viral)\n")
+                of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\tCoverage (if strain-level)\tVirus_host (if viral)\n")
             else:
-                of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\t Coverage (if strain-level)\n")
+                of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\tCoverage (if strain-level)\n")
 
             level_to_key = dict()
             for key in tax_abundance.keys():
