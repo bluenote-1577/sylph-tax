@@ -12,6 +12,8 @@ def merge_data(files, column_name):
     merged_df = pd.DataFrame()
     if column_name == 'ANI':
         column_name = 'ANI (if strain-level)'
+    elif column_name == 'Coverage':
+        column_name = 'Coverage (if strain-level)'
     for file in files:
         with open(file) as f:
             first_line = f.readline()
@@ -22,6 +24,7 @@ def merge_data(files, column_name):
             merged_df = df
         else:
             merged_df = merged_df.join(df, how='outer')
+    merged_df.dropna(how="all", inplace=True)
     merged_df.fillna(0, inplace=True)
     return merged_df
 
