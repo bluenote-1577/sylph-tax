@@ -41,6 +41,7 @@ def main(args, config):
             file = Path(file_name)
         if not file.exists():
             print(f"ERROR: Metadata file {file} not found. Exiting.")
+            sys.exit(1)
         ### Process gzip file instead if extension detected
         if '.gz' in file_name or '.gzip' in file_name or prebuilt:
             f=gzip.open(file,'rt')
@@ -80,7 +81,7 @@ def main(args, config):
             print(f"Writing output to: {out_file} ...")
             if out_file in outs:
                 print(f"ERROR! Multiple .sylphmpa files would have the same sample name ({out}), which will cause a file to be overwritten. Consider --add-folder-information to disambiguate sample files")
-                exit(1)
+                sys.exit(1)
             outs.add(out_file)
             out_file_path = Path(out_file)
             if out_file_path.exists():
