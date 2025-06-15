@@ -34,6 +34,8 @@ def main(args, config):
     for file_name in args.taxonomy_metadata:
         prebuilt = False
         if file_name in __name_to_metadata_file__: 
+            if "UHGV" in file_name:
+                print("WARNING: the UHGV taxonomy output format differs slightly from prokaryotic taxonomies. Taxonomic ranks may be skipped (e.g., Family -> Species rather than Family -> Genus -> Species)") 
             base_file = __name_to_metadata_file__[file_name]
             file = Path(config.json['taxonomy_dir']) / base_file
             prebuilt = True
@@ -128,6 +130,8 @@ def main(args, config):
                 tax_levels = tax_str.split(';')
                 cur_tax = ''
                 for level in tax_levels:
+                    if level == "":
+                        level = "UNKNOWN"
                     if cur_tax:
                         cur_tax += '|'
                     cur_tax += level
@@ -163,6 +167,10 @@ def main(args, config):
                             accession = tax.split('t__')[-1]
                             if accession in genome_to_additional_data:
                                 val = genome_to_additional_data[accession]
+                                splitted = val.split(';')
+                                splitted_unknown = [x if x != "" else "UNKNOWN" for x in splitted]
+                                new_val = ';'.join(splitted_unknown)
+                                val = new_val
                             else:
                                 val = 'NA'
                             of.write(f"{tax}\t{tax_abundance[tax]}\t{seq_abundance[tax]}\t{ani_dict[tax]}\t{cov_dict[tax]}\t{val}\n")
