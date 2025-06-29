@@ -3,9 +3,6 @@
 > [!IMPORTANT]
 > Documentation for `sylph-tax` will be migrating to https://sylph-docs.github.io/sylph-tax/.
 
-> [!NOTE]
-> This repo replaces the old [sylph-utils](https://github.com/bluenote-1577/sylph-utils) scripts. `sylph-tax` is easier to download/install and use than `sylph-utils`.
-
 [Sylph](https://github.com/bluenote-1577/sylph) is an efficient and accurate metagenome profiler. However, its output does not have taxonomic information. `sylph-tax` can turn `sylph`'s TSV output into a **taxonomic profile** like Kraken or MetaPhlAn. `sylph-tax` does this by using custom taxonomy files to annotate sylph's output. 
 
 ## Taxonomy integration - available databases with taxonomy files
