@@ -43,7 +43,7 @@ def populate_taxonomy_options(parser):
                         metavar="STRING",
                         type=str,
                         default = "")
-    taxonomy_metadata_help = "Taxonomy metadata inputs. If multiple are provided, they will be merged. Provided taxonomies: [" + ", ".join(__name_to_metadata_file__.keys()) + "]. Custom metadata files can be used as well; see online manual."
+    taxonomy_metadata_help = "Taxonomy metadata inputs. If multiple are provided, they will be merged. Provided taxonomies: [" + ", ".join(__name_to_metadata_file__.keys()) + "]. Custom metadata files (.tsv) can be used as well; see online manual."
     parser.add_argument("-t",
                         "--taxonomy-metadata",
                         help = taxonomy_metadata_help,
@@ -53,7 +53,7 @@ def populate_taxonomy_options(parser):
                         nargs='+')
     parser.add_argument("-a",
                         "--annotate-virus-hosts",
-                        help = "Add additional column(s) by integrating viral-host information available (currently available for IMGVR4.1)",
+                        help = "Add additional column(s) by integrating viral-host information available (currently available for IMGVR4.1, UHGV taxonomies)",
                         action='store_true')
     parser.add_argument("-f",
                         "--add-folder-information",
