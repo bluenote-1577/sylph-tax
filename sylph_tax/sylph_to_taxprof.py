@@ -119,9 +119,19 @@ def main(args, config):
                 elif contig_id in genome_to_taxonomy:
                     tax_str = genome_to_taxonomy[contig_id]
                 else:
-                    tax_str = 'NO_TAXONOMY;t__' + genome_file
-                    if not first_warn:
-                        print(f"WARNING: No taxonomy information found for entry {genome_file} and contig {contig_id} in metadata files. Did you use the correct database and taxonomies? Assigning default taxonomy")
+                    split_fasta1 = genome_file.split('.fa')[0]
+                    split_fasta2 = genome_file.split('.fasta')[0]
+                    split_fasta3 = genome_file.split('.fna')[0]
+                    if split_fasta1 in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[split_fasta1]
+                    elif split_fasta2 in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[split_fasta2]
+                    elif split_fasta3 in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[split_fasta3]
+                    else:
+                        tax_str = 'NO_TAXONOMY;t__' + genome_file
+                        if not first_warn:
+                            print(f"WARNING: No taxonomy information found for entry {genome_file} and contig {contig_id} in metadata files. Did you use the correct database and taxonomies? Assigning default taxonomy")
 
                 abundance = float(row['Sequence_abundance'])
                 rel_abundance = float(row['Taxonomic_abundance'])
