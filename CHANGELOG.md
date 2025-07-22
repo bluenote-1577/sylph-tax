@@ -1,4 +1,4 @@
-## v1.5.1 - TODO
+## v1.5.1 - 7-22-2025 (should've added this before pushing v1.5.0. oh well)
 
 - Add exactly Pavian compatible format option `--pavian` by replicating exactly MetaPhlan4 columns.
 
