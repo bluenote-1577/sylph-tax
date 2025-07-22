@@ -1,3 +1,7 @@
+## v1.5.0 - 7-22-2025
+
+- Added GlobDB_r226 as a supported database by default. 
+
 ## v1.4.0 - 7-18-2025
 
 **NEW**
