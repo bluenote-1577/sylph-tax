@@ -1,3 +1,7 @@
+## v1.5.1 - TODO
+
+- Add exactly Pavian compatible format option `--pavian` by replicating exactly MetaPhlan4 columns.
+
 ## v1.5.0 - 7-22-2025
 
 - Added GlobDB_r226 as a supported database by default. 

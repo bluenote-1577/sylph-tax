@@ -59,6 +59,10 @@ def populate_taxonomy_options(parser):
                         "--add-folder-information",
                         help = "Include directory/folder path information in the output files. This is needed if your samples have the same read name but different directory structures.",
                         action='store_true')
+    parser.add_argument("--pavian",
+                        help = "Make a pavian-compatible taxonomy file for visualization. Not recommended except for use with pavian.",
+                        action='store_true')
+
 
 def populate_merge_options(parser):
     parser.add_argument('files', nargs='+', help='Paths to the *.sylphmpa files output by sylph-tax taxonomy')

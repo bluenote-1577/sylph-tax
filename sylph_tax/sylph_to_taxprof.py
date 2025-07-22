@@ -21,6 +21,7 @@ def main(args, config):
         print("WARNING: No downloaded taxonomy files could be found. Ensure that you have downloaded the taxonomy metadata files using the 'download' command.")
 
     annotate_virus = args.annotate_virus_hosts
+    pavian = args.pavian
 
     
     ### This is a dictionary that contains the genome_file 
@@ -153,8 +154,14 @@ def main(args, config):
                         cov_dict[cur_tax] = cov
 
             # Print the CAMI BioBoxes profiling format
+            if pavian:
+                of.write("#mpa_v3_sylphmock")
+
             of.write(f"#SampleID\t{sample_file}\tTaxonomies_used:{args.taxonomy_metadata}\n")
-            if annotate_virus:
+
+            if pavian:
+                of.write("#clade_name\tplaceholder\trelative_abundance\tplaceholder2\n")
+            elif annotate_virus:
                 of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\tCoverage (if strain-level)\tVirus_host (if viral)\n")
             else:
                 of.write("clade_name\trelative_abundance\tsequence_abundance\tANI (if strain-level)\tCoverage (if strain-level)\n")
@@ -172,8 +179,18 @@ def main(args, config):
             for level in sorted_keys:
                 keys_for_level = sorted(level_to_key[level], key = lambda x: tax_abundance[x], reverse=True)
                 for tax in keys_for_level:
+
+                    taxid = None
+                    if pavian:
+                        tax_len = len(tax.split('|'))-1
+                        taxid = '0'
+                        for i in range(tax_len):
+                            taxid += '|0'
+
                     if tax in ani_dict:
-                        if annotate_virus:
+                        if pavian:
+                            of.write(f"{tax}\t{taxid}\t{tax_abundance[tax]}\t\n")
+                        elif annotate_virus:
                             accession = tax.split('t__')[-1]
                             if accession in genome_to_additional_data:
                                 val = genome_to_additional_data[accession]
@@ -187,7 +204,9 @@ def main(args, config):
                         else:
                             of.write(f"{tax}\t{tax_abundance[tax]}\t{seq_abundance[tax]}\t{ani_dict[tax]}\t{cov_dict[tax]}\n")
                     else:
-                        if annotate_virus:
+                        if pavian:
+                            of.write(f"{tax}\t{taxid}\t{tax_abundance[tax]}\t\n")
+                        elif annotate_virus:
                             of.write(f"{tax}\t{tax_abundance[tax]}\t{seq_abundance[tax]}\tNA\tNA\tNA\n")
                         else:
                             of.write(f"{tax}\t{tax_abundance[tax]}\t{seq_abundance[tax]}\tNA\tNA\n")
