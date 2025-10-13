@@ -7,6 +7,12 @@ import gzip
 
 from sylph_tax.metadata_files import __name_to_metadata_file__
 
+def trim_file_path(file_name):
+    return file_name.split('/')[-1]
+
+def trim_contig_name(contig_name):
+    return contig_name.split()[0]
+
 def genome_file_to_gcf_acc(file_name):
     if 'ASM' in file_name:
         return file_name.split('/')[-1].split('_ASM')[0]
@@ -29,6 +35,7 @@ def main(args, config):
     ### {'my_genome.fna.gz' : b__Bacteria;...}
     genome_to_taxonomy = dict()
     genome_to_additional_data = dict()
+    metadata_files_full = []
 
     print(f"Reading metadata: {args.taxonomy_metadata} ...")
 
@@ -51,6 +58,8 @@ def main(args, config):
         else:
             f = open(file,'r')
 
+        metadata_files_full.append(str(file))
+
         ### Tag each taxonomy string with a t__ strain level identifier
         for row in f:
             spl = row.rstrip().split('\t');
@@ -62,9 +71,18 @@ def main(args, config):
 
     for sylph_result in args.sylph_results:
         print("Processing sylph output file: ", sylph_result)
+
+        with open(sylph_result, 'r') as file:
+            # Read the first line of the file
+            first_line = file.readline()
+            num_cols = len(first_line.split('\t'))
+            second_line = file.readline()
+            num_cols2 = len(second_line.split('\t'))
+            if num_cols != num_cols2:
+                print(f"WARNING: there is an extra tab, probably in the contig fasta id used for sylph's database. Removing all columns after the first {num_cols}.")
         # Read sylph's output TSV file into a Pandas DataFrame
         try:
-            df = pd.read_csv(sylph_result, sep='\t')
+            df = pd.read_csv(sylph_result, sep='\t', usecols=range(num_cols))
             df['Sample_file'] = df['Sample_file'].astype(str)
         except:
             print("ERROR: Could not read sylph results file. Exiting.")
@@ -82,12 +100,12 @@ def main(args, config):
                 out = sample_file.split('/')[-1]
             out_file = args.output_prefix + out + '.sylphmpa'
             print(f"Writing output to: {out_file} ...")
-            if out_file in outs:
+            if out_file in outs and not args.overwrite:
                 print(f"ERROR! Multiple .sylphmpa files would have the same sample name ({out}), which will cause a file to be overwritten. Consider --add-folder-information to disambiguate sample files")
                 sys.exit(1)
             outs.add(out_file)
             out_file_path = Path(out_file)
-            if out_file_path.exists():
+            if out_file_path.exists() and not args.overwrite:
                 print(f"ERROR! A .sylphmpa file exists with the sample name ({out}), which will cause a file to be overwritten. Consider --add-folder-information to disambiguate sample files")
                 sys.exit(1)
             of = open(out_file,'w')
@@ -105,34 +123,42 @@ def main(args, config):
 
                 # Parse the genome file... assume the file is in gtdb format.
                 # This can be changed. 
-                genome_file = genome_file_to_gcf_acc(row['Genome_file'])
-                contig_id = contig_to_imgvr_acc(row['Contig_name'])
+                tax_str = None
                 ani = float(row['Adjusted_ANI'])
-                if 'Eff_cov' in row:
-                    cov = float(row['Eff_cov'])
-                else:
-                    cov = float(row['True_cov'])
-
-                if genome_file in genome_to_taxonomy:
-                    tax_str = genome_to_taxonomy[genome_file]
-                elif genome_file +'.gz' in genome_to_taxonomy:
-                    tax_str = genome_to_taxonomy[genome_file + '.gz']
-                elif contig_id in genome_to_taxonomy:
-                    tax_str = genome_to_taxonomy[contig_id]
-                else:
-                    split_fasta1 = genome_file.split('.fa')[0]
-                    split_fasta2 = genome_file.split('.fasta')[0]
-                    split_fasta3 = genome_file.split('.fna')[0]
-                    if split_fasta1 in genome_to_taxonomy:
-                        tax_str = genome_to_taxonomy[split_fasta1]
-                    elif split_fasta2 in genome_to_taxonomy:
-                        tax_str = genome_to_taxonomy[split_fasta2]
-                    elif split_fasta3 in genome_to_taxonomy:
-                        tax_str = genome_to_taxonomy[split_fasta3]
+                for i in range(2):
+                    if i == 0:
+                        genome_file = genome_file_to_gcf_acc(row['Genome_file'])
+                        contig_id = contig_to_imgvr_acc(row['Contig_name'])
                     else:
-                        tax_str = 'NO_TAXONOMY;t__' + genome_file
-                        if not first_warn:
-                            print(f"WARNING: No taxonomy information found for entry {genome_file} and contig {contig_id} in metadata files. Did you use the correct database and taxonomies? Assigning default taxonomy")
+                        genome_file = trim_file_path(row['Genome_file'])
+                        contig_id = trim_contig_name(row['Contig_name'])
+
+                    if 'Eff_cov' in row:
+                        cov = float(row['Eff_cov'])
+                    else:
+                        cov = float(row['True_cov'])
+
+                    if genome_file in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[genome_file]
+                    elif genome_file +'.gz' in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[genome_file + '.gz']
+                    elif contig_id in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[contig_id]
+                    else:
+                        split_fasta1 = genome_file.split('.fa')[0]
+                        split_fasta2 = genome_file.split('.fasta')[0]
+                        split_fasta3 = genome_file.split('.fna')[0]
+                        if split_fasta1 in genome_to_taxonomy:
+                            tax_str = genome_to_taxonomy[split_fasta1]
+                        elif split_fasta2 in genome_to_taxonomy:
+                            tax_str = genome_to_taxonomy[split_fasta2]
+                        elif split_fasta3 in genome_to_taxonomy:
+                            tax_str = genome_to_taxonomy[split_fasta3]
+
+                if tax_str is None:
+                    tax_str = 'NO_TAXONOMY;t__' + genome_file + ':' + contig_id
+                    if not first_warn:
+                        print(f"WARNING: No taxonomy information found for entry {genome_file} and contig {contig_id} in metadata files ({metadata_files_full}). Did you use the correct database and taxonomies? Assigning default taxonomy")
 
                 abundance = float(row['Sequence_abundance'])
                 rel_abundance = float(row['Taxonomic_abundance'])

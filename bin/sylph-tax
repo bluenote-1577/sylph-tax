@@ -62,6 +62,10 @@ def populate_taxonomy_options(parser):
     parser.add_argument("--pavian",
                         help = "Make a pavian-compatible taxonomy file for visualization. Not recommended except for use with pavian.",
                         action='store_true')
+    parser.add_argument("--overwrite",
+                        help = "Force overwriting of output files.",
+                        action='store_true')
+
 
 
 def populate_merge_options(parser):
