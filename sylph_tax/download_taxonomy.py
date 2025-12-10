@@ -60,6 +60,7 @@ def main(args, config):
         print(f"DOWNLOAD: Current taxonomy location is set to {config.json['taxonomy_dir']}.")
 
     if args.download_to != None:
+        os.makedirs(args.download_to, exist_ok=True)
         if config != None:
             config.set_taxonomy_dir(args.download_to)
         downloader = SylphTaxDownloader(args.download_to)

@@ -1,3 +1,14 @@
+## v1.7.0 - 10-13-2025 
+
+- Fixed bug where tabs in sylph database would cause sylph-tax to fail (thanks to Donovan Parks)
+- Changed metadata file parsing to be more relaxed and not split ASM or GENOMIC unless no matchings ids are found. 
+- Added some changes to the default outputs when no taxonomy is found. 
+
+## v1.6.0 - 10-11-2025 
+
+- Added new fungal refseq database because the previous one didn't have Saccharomyces cerevisiae...
+- Fixed `sylph-tax download` so that `--download-to` can point to anywhere and it will create a folder. 
+
 ## v1.5.1 - 7-22-2025 (should've added this before pushing v1.5.0. oh well)
 
 - Add exactly Pavian compatible format option `--pavian` by replicating exactly MetaPhlan4 columns.
