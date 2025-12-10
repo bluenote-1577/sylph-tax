@@ -29,6 +29,7 @@ def download_command(args, config):
 def populate_download_options(parser):
     """Handle the download subcommand"""
     parser.add_argument("--download-to", help="Download taxonomy metadata to this directory (must exist, e.g. my/folder/). A config file is written to $HOME or $SYLPH_TAXONOMY_CONFIG.", type=str)
+    parser.add_argument("--no-config", help="Do not require a config file - this may be useful if there's no way of writing to $SYLPH_TAXONOMY_CONFIG", action='store_true')
 
 def populate_taxonomy_options(parser):
     """Populate the profile subcommand parser with options"""

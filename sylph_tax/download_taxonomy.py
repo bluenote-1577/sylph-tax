@@ -49,7 +49,7 @@ class SylphTaxDownloader:
 
 def main(args, config):
 
-    if config == None:
+    if config == None and not args.no_config:
         env_var = os.getenv('SYLPH_TAXONOMY_CONFIG')
         print(f"ERROR: Could not load config file at {env_var} -- 'sylph-tax download' will not attempt to download taxonomy metadata files. Please manually download taxonomy metadata files yourself. Exiting")
         exit(1)
@@ -60,7 +60,8 @@ def main(args, config):
         print(f"DOWNLOAD: Current taxonomy location is set to {config.json['taxonomy_dir']}.")
 
     if args.download_to != None:
-        config.set_taxonomy_dir(args.download_to)
+        if config != None:
+            config.set_taxonomy_dir(args.download_to)
         downloader = SylphTaxDownloader(args.download_to)
         downloader.download_taxonomy(__metadata_file_urls__)
         print(f"DOWNLOAD: Taxonomy metadata files have been downloaded to {args.download_to}.")
