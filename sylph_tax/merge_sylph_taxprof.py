@@ -9,7 +9,7 @@ def read_tsv(file_path, column_name):
     return df
 
 def merge_data(files, column_name):
-    merged_df = pd.DataFrame()
+    merged_df = None
     if column_name == 'ANI':
         column_name = 'ANI (if strain-level)'
     elif column_name == 'Coverage':
@@ -20,7 +20,7 @@ def merge_data(files, column_name):
             sample_name = first_line.split('\t')[1].strip()
         df = read_tsv(file, column_name)
         df.rename(columns={column_name: sample_name}, inplace=True)
-        if merged_df.empty:
+        if merged_df is None:
             merged_df = df
         else:
             merged_df = merged_df.join(df, how='outer')
