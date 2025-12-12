@@ -4,7 +4,7 @@ import argparse
 import pandas as pd
 
 def read_tsv(file_path, column_name):
-    df = pd.read_csv(file_path, sep='\t', usecols=['clade_name', column_name], comment='#')
+    df = pd.read_csv(file_path, sep='\t', usecols=['clade_name', column_name], dtype={column_name: float}, comment='#')
     df.set_index('clade_name', inplace=True)
     return df
 
@@ -26,6 +26,7 @@ def merge_data(files, column_name):
             merged_df = merged_df.join(df, how='outer')
     merged_df.dropna(how="all", inplace=True)
     merged_df.fillna(0, inplace=True)
+
     return merged_df
 
 def main(args, config):
