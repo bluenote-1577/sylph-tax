@@ -7,13 +7,13 @@ from pathlib import Path
 import argparse
 import requests
 
-import .sylph_tax
+import sylph_tax
 
 # Import the modules we want to test
-from .sylph_tax.download_taxonomy import SylphTaxDownloader, main as download_main
-from .sylph_tax.json_config import JsonConfig
-from .sylph_tax.metadata_files import __metadata_file_urls__, __name_to_metadata_file__
-from .sylph_tax.sylph_to_taxprof import (
+from sylph_tax.download_taxonomy import SylphTaxDownloader, main as download_main
+from sylph_tax.json_config import JsonConfig
+from sylph_tax.metadata_files import __metadata_file_urls__, __name_to_metadata_file__
+from sylph_tax.sylph_to_taxprof import (
     genome_file_to_gcf_acc,
     contig_to_imgvr_acc,
     main as taxprof_main,
@@ -69,18 +69,12 @@ class TestSylphToTaxprof(TestCase):
         )
 
         # Test regular format
-        self.assertEqual(
-            genome_file_to_gcf_acc("path/to/GCF_000789_genomic.fna"), "GCF_000789"
-        )
+        self.assertEqual(genome_file_to_gcf_acc("path/to/GCF_000789_genomic.fna"), "GCF_000789")
 
     def test_contig_to_imgvr_acc(self):
-        self.assertEqual(
-            contig_to_imgvr_acc("IMGVR_UViG_123|other_info"), "IMGVR_UViG_123"
-        )
+        self.assertEqual(contig_to_imgvr_acc("IMGVR_UViG_123|other_info"), "IMGVR_UViG_123")
 
-        self.assertEqual(
-            contig_to_imgvr_acc("Simple_contig_name"), "Simple_contig_name"
-        )
+        self.assertEqual(contig_to_imgvr_acc("Simple_contig_name"), "Simple_contig_name")
 
 
 class TestMetadataFiles(TestCase):
@@ -244,9 +238,7 @@ class TestMetadataURLs(TestCase):
             with self.subTest(url=url):
                 # Make HEAD request first to check accessibility
                 response = requests.head(url, allow_redirects=True)
-                self.assertEqual(
-                    response.status_code, 200, f"URL not accessible: {url}"
-                )
+                self.assertEqual(response.status_code, 200, f"URL not accessible: {url}")
 
                 # Check file size is reasonable (more than 1KB)
                 content_length = int(response.headers.get("content-length", 0))
@@ -257,9 +249,7 @@ class TestMetadataURLs(TestCase):
         for name, filename in __name_to_metadata_file__.items():
             with self.subTest(name=name):
                 # Check if file exists in URLs
-                matching_urls = [
-                    url for url in __metadata_file_urls__ if url.endswith(filename)
-                ]
+                matching_urls = [url for url in __metadata_file_urls__ if url.endswith(filename)]
                 self.assertEqual(
                     len(matching_urls),
                     1,
