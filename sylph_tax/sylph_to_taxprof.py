@@ -40,9 +40,15 @@ def main(args, config):
     )
 
     if needs_taxonomy_dir and taxonomy_dir is None:
-        print(
-            "ERROR: --taxonomy-dir is required when --no-config is set and using pre-built taxonomies. Please specify a directory using --taxonomy-dir, or provide custom taxonomy file paths directly."
-        )
+        # Distinguish between --no-config mode and config with unset taxonomy_dir
+        if config is None:
+            print(
+                "ERROR: --taxonomy-dir is required when --no-config is set and using pre-built taxonomies. Please specify a directory using --taxonomy-dir, or provide custom taxonomy file paths directly."
+            )
+        else:
+            print(
+                "ERROR: No taxonomy directory has been configured. Please run 'sylph-tax download --download-to <directory>' first, or specify --taxonomy-dir."
+            )
         sys.exit(1)
 
     if taxonomy_dir is None and not needs_taxonomy_dir:

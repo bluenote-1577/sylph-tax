@@ -69,12 +69,18 @@ class TestSylphToTaxprof(TestCase):
         )
 
         # Test regular format
-        self.assertEqual(genome_file_to_gcf_acc("path/to/GCF_000789_genomic.fna"), "GCF_000789")
+        self.assertEqual(
+            genome_file_to_gcf_acc("path/to/GCF_000789_genomic.fna"), "GCF_000789"
+        )
 
     def test_contig_to_imgvr_acc(self):
-        self.assertEqual(contig_to_imgvr_acc("IMGVR_UViG_123|other_info"), "IMGVR_UViG_123")
+        self.assertEqual(
+            contig_to_imgvr_acc("IMGVR_UViG_123|other_info"), "IMGVR_UViG_123"
+        )
 
-        self.assertEqual(contig_to_imgvr_acc("Simple_contig_name"), "Simple_contig_name")
+        self.assertEqual(
+            contig_to_imgvr_acc("Simple_contig_name"), "Simple_contig_name"
+        )
 
 
 class TestMetadataFiles(TestCase):
@@ -226,6 +232,28 @@ class TestNoConfigFlag(TestCase):
         # Should not raise - custom taxonomy doesn't need taxonomy_dir
         taxprof_main(args, config=None)
 
+    def test_taxprof_config_with_unset_taxonomy_dir_gives_helpful_error(self):
+        """Test that taxprof with config but unset taxonomy_dir gives helpful error (not --no-config error)."""
+        # Create a mock config with taxonomy_dir set to "NONE" (the default/unset state)
+        mock_config = MagicMock()
+        mock_config.json = {"taxonomy_dir": "NONE"}
+
+        args = argparse.Namespace(
+            sylph_results=["test.tsv"],
+            taxonomy_metadata=["GTDB_r226"],  # Pre-built taxonomy
+            taxonomy_dir=None,
+            no_config=False,
+            annotate_virus_hosts=False,
+            pavian=False,
+            output_prefix="",
+            add_folder_information=False,
+            overwrite=False,
+        )
+        # Should fail with exit code 1, but with a different error message than --no-config
+        with self.assertRaises(SystemExit) as cm:
+            taxprof_main(args, config=mock_config)
+        self.assertEqual(cm.exception.code, 1)
+
 
 if __name__ == "__main__":
     main()
@@ -238,7 +266,9 @@ class TestMetadataURLs(TestCase):
             with self.subTest(url=url):
                 # Make HEAD request first to check accessibility
                 response = requests.head(url, allow_redirects=True)
-                self.assertEqual(response.status_code, 200, f"URL not accessible: {url}")
+                self.assertEqual(
+                    response.status_code, 200, f"URL not accessible: {url}"
+                )
 
                 # Check file size is reasonable (more than 1KB)
                 content_length = int(response.headers.get("content-length", 0))
@@ -249,7 +279,9 @@ class TestMetadataURLs(TestCase):
         for name, filename in __name_to_metadata_file__.items():
             with self.subTest(name=name):
                 # Check if file exists in URLs
-                matching_urls = [url for url in __metadata_file_urls__ if url.endswith(filename)]
+                matching_urls = [
+                    url for url in __metadata_file_urls__ if url.endswith(filename)
+                ]
                 self.assertEqual(
                     len(matching_urls),
                     1,
