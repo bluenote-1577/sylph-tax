@@ -88,20 +88,18 @@ def main():
         version=__version__,
     )
 
-    env_config_loc = os.environ.get(__tax_env_variable__)
-    if not env_config_loc:
-        default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
+    parser.add_argument(
+        "--taxonomy-dir",
+        help="Path to taxonomy metadata directory. Overrides the config file setting. For 'download', serves as download destination if --download-to is not specified.",
+        type=str,
+        metavar="PATH",
+    )
 
-        # confusingly, this may not actually modify the environment variable; only in python-space
-        os.environ[__tax_env_variable__] = str(default_config_loc)
-
-    config_loc = Path(os.environ[__tax_env_variable__])
-
-    try:
-        config = json_config.JsonConfig(config_loc)
-    except:
-        print(f"WARNING: Could not load config file at '{config_loc}' -- please set the {__tax_env_variable__} environmental variable to a valid file name such as /path/to/config.json.")
-        config = None
+    parser.add_argument(
+        "--no-config",
+        help="Disable reading and writing of the global config file.",
+        action="store_true",
+    )
 
     subparsers = parser.add_subparsers(dest='command', required=True)
 
@@ -127,8 +125,28 @@ def main():
     taxonomy_parser.set_defaults(func=taxonomy_command)
     download_parser.set_defaults(func=download_command)
 
-    # Parse arguments and call the appropriate function
+    # Parse arguments
     args = parser.parse_args()
+
+    # Load config unless --no-config is set
+    config = None
+    if not args.no_config:
+        env_config_loc = os.environ.get(__tax_env_variable__)
+        if not env_config_loc:
+            default_config_loc = Path('~/.config/sylph-tax/config.json').expanduser()
+
+            # confusingly, this may not actually modify the environment variable; only in python-space
+            os.environ[__tax_env_variable__] = str(default_config_loc)
+
+        config_loc = Path(os.environ[__tax_env_variable__])
+
+        try:
+            config = json_config.JsonConfig(config_loc)
+        except:
+            print(f"WARNING: Could not load config file at '{config_loc}' -- please set the {__tax_env_variable__} environmental variable to a valid file name such as /path/to/config.json.")
+            config = None
+
+    # Call the appropriate subcommand function
     args.func(args, config)
     
 if __name__ == '__main__':

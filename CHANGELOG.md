@@ -1,3 +1,7 @@
+## v1.7.1 - 12-14-2025 
+
+- Fixed bug with merging empty sylphmpa files (Thanks Florian Plaza Onate)
+
 ## v1.7.0 - 10-13-2025 
 
 - Fixed bug where tabs in sylph database would cause sylph-tax to fail (thanks to Donovan Parks)
