@@ -1,3 +1,9 @@
+## v1.8.0 - 12-16-2025
+
+We now allow --no-config option in sylph-tax so users can avoid using a configuration file (default at ~/.config/sylph-tax/config.json) (thanks @nrminor)
+
+This should be very useful for users in HPC environments that have broken/not-shared file systems. In general, this will make it easier to explicitly define database usage. 
+
 ## v1.7.1 - 12-14-2025 
 
 - Fixed bug with merging empty sylphmpa files (Thanks Florian Plaza Onate)
