@@ -1,3 +1,7 @@
+## v1.9.0 - 4-18-2026
+
+- Added GTDB r232.
+
 ## v1.8.0 - 12-16-2025
 
 We now allow --no-config option in sylph-tax so users can avoid using a configuration file (default at ~/.config/sylph-tax/config.json) (thanks @nrminor)
