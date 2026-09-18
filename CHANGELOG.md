@@ -1,6 +1,7 @@
 ## v1.9.2 - 9-18-2026
 
 - Fixed bug for GlobDB r232 pointing to the wrong metadata file, and its parsing logic which failed on GCF---.1_genomic.fna.gz type strings. 
+- Multi threaded downloads for sylph-tax download. 
 
 ## v1.9.1 - 6-26-2026
 

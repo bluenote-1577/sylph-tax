@@ -116,7 +116,9 @@ class TestNoConfigFlag(TestCase):
 
     def test_download_no_config_requires_taxonomy_dir(self):
         """Test that download with --no-config fails without --taxonomy-dir."""
-        args = argparse.Namespace(download_to=None, taxonomy_dir=None, no_config=True)
+        args = argparse.Namespace(
+            download_to=None, taxonomy_dir=None, no_config=True, threads=3
+        )
         with self.assertRaises(SystemExit) as cm:
             download_main(args, config=None)
         self.assertEqual(cm.exception.code, 1)
@@ -124,7 +126,10 @@ class TestNoConfigFlag(TestCase):
     def test_download_no_config_with_taxonomy_dir(self):
         """Test that download with --no-config succeeds with --taxonomy-dir."""
         args = argparse.Namespace(
-            download_to=None, taxonomy_dir=str(self.taxonomy_dir), no_config=True
+            download_to=None,
+            taxonomy_dir=str(self.taxonomy_dir),
+            no_config=True,
+            threads=3,
         )
         # Mock the actual download to avoid network calls
         import sylph_tax.download_taxonomy as dt
@@ -141,7 +146,10 @@ class TestNoConfigFlag(TestCase):
     def test_download_no_config_with_download_to(self):
         """Test that download with --no-config succeeds with --download-to."""
         args = argparse.Namespace(
-            download_to=str(self.taxonomy_dir), taxonomy_dir=None, no_config=True
+            download_to=str(self.taxonomy_dir),
+            taxonomy_dir=None,
+            no_config=True,
+            threads=3,
         )
         # Mock the actual download to avoid network calls
         import sylph_tax.download_taxonomy as dt
@@ -164,6 +172,7 @@ class TestNoConfigFlag(TestCase):
             download_to=str(download_dest),
             taxonomy_dir=str(self.taxonomy_dir),
             no_config=True,
+            threads=3,
         )
 
         # Track which directory was used

@@ -1,3 +1,6 @@
 build/
 temp/
 misc/
+__pycache__/
+*.pyc
+*.egg-info/
