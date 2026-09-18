@@ -1,4 +1,8 @@
-## v1.9.1 - 4-18-2026
+## v1.9.2 - 9-18-2026
+
+- Fixed bug for GlobDB r232 pointing to the wrong metadata file, and its parsing logic which failed on GCF---.1_genomic.fna.gz type strings. 
+
+## v1.9.1 - 6-26-2026
 
 - Added GlobDB r232.
 

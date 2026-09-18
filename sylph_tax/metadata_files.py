@@ -12,7 +12,7 @@ __metadata_file_urls__ = [
 "https://zenodo.org/records/15670321/files/uhgv_default_metadata.tsv.gz",
 "https://zenodo.org/records/15670321/files/uhgv_ictv_metadata.tsv.gz",
 "https://zenodo.org/records/16322879/files/globdb_r226_sylph_tax.tsv.gz",
-"https://fileshare.lisc.univie.ac.at/globdb/globdb_r232/taxonomic_profiling/globdb_r232_taxonomy_sylph.tsv.gz"
+"https://fileshare.lisc.univie.ac.at/globdb/globdb_r232/globdb_r232_taxonomy.tsv.gz"
 ]
 
 __name_to_metadata_file__ = {
@@ -29,7 +29,7 @@ __name_to_metadata_file__ = {
 "SoilSMAG": "soil_smag_metadata.tsv.gz",
 "TaraEukaryoticSMAG": "tara_SMAGs_metadata.tsv.gz",
 "GlobDB_r226": "globdb_r226_sylph_tax.tsv.gz",
-"GlobDB_r232": "globdb_r232_sylph_tax.tsv.gz"
+"GlobDB_r232": "globdb_r232_taxonomy.tsv.gz",
 }
 
 __tax_env_variable__ = "SYLPH_TAXONOMY_CONFIG"

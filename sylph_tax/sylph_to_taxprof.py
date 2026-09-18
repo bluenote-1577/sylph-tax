@@ -21,6 +21,10 @@ def genome_file_to_gcf_acc(file_name):
         return file_name.split("/")[-1].split("_ASM")[0]
     return file_name.split("/")[-1].split("_genomic")[0]
 
+def genome_file_to_gcf_acc_STRIP_DOT(file_name):
+    return file_name.split("/")[-1].split(".")[0]
+
+
 
 def contig_to_imgvr_acc(contig_name):
     return contig_name.split(" ")[0].split("|")[0]
@@ -175,9 +179,11 @@ def main(args, config):
                     if i == 0:
                         genome_file = genome_file_to_gcf_acc(row["Genome_file"])
                         contig_id = contig_to_imgvr_acc(row["Contig_name"])
+                        genome_file_glob = genome_file_to_gcf_acc_STRIP_DOT(row["Genome_file"])
                     else:
                         genome_file = trim_file_path(row["Genome_file"])
                         contig_id = trim_contig_name(row["Contig_name"])
+                        genome_file_glob = genome_file
 
                     if "Eff_cov" in row:
                         cov = float(row["Eff_cov"])
@@ -188,6 +194,8 @@ def main(args, config):
                         tax_str = genome_to_taxonomy[genome_file]
                     elif genome_file + ".gz" in genome_to_taxonomy:
                         tax_str = genome_to_taxonomy[genome_file + ".gz"]
+                    elif genome_file_glob in genome_to_taxonomy:
+                        tax_str = genome_to_taxonomy[genome_file_glob]
                     elif contig_id in genome_to_taxonomy:
                         tax_str = genome_to_taxonomy[contig_id]
                     else:
